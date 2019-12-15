@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const HttpError = require('./models/http-error');
 
 const placesRoutes = require('./routes/places-routes');
@@ -23,5 +24,12 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || 'An unknown error occurred' });
 });
 
-app.listen(5000);
+(async () => {
+  try {
+    await mongoose.connect(`mongodb+srv://mernUser:${encodeURIComponent('Nypl\@060191143')}@cluster0-mf8wc.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+    app.listen(5000);
+  } catch(error) {
+    console.log(error);
+  }
+})();
 
