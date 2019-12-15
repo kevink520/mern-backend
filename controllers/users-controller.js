@@ -45,7 +45,7 @@ const signUpUser = async (req, res, next) => {
     email,
     password,
     image: `https://i.pravatar.cc/300?v=${id}`,
-    places: 0,
+    places: [],
   });
 
   try {

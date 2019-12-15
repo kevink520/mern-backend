@@ -33,7 +33,7 @@ const getPlacesByUserId = async (req, res, next) => {
     return next(error);
   }
 
-  if (!userWithPlaces || userWithPlaces.length === 0) {
+  if (!userWithPlaces || userWithPlaces.places.length === 0) {
     const error = new HttpError('Could not find places for the provided user id', 404);
     return next(error);
   }
@@ -117,7 +117,7 @@ const updatePlace = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(200).json({ place: updatedPlace });
+  res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
 const deletePlace = async (req, res, next) => {
@@ -141,7 +141,7 @@ const deletePlace = async (req, res, next) => {
     await place.remove({ session: sess });
     place.creator.places.pull(place);
     await place.creator.save({ session: sess });
-    sess.commitTransaction();
+    await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError('Something went wrong. Could not delete place.', 500);
     return next(error);
