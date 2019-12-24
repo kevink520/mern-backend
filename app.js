@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+//const cors = require('cors');
 const mongoose = require('mongoose');
 const HttpError = require('./models/http-error');
 
@@ -10,14 +11,16 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE',
+  });
+
   next();
 });
+//app.options('*', cors())
+//app.use(cors());
 
 app.use('/api/places', placesRoutes);
 app.use('/api/users', usersRoutes);
@@ -25,13 +28,13 @@ app.use((req, res, next) => {
   next(new HttpError('Could not find this route.', 404));
 });
 
-app.use((error, req, res, next) => {
+app.use((err, req, res, next) => {
   if (res.headerSent) {
     return next(err);
   }
 
-  res.status(error.code || 500);
-  res.json({ message: error.message || 'An unknown error occurred' });
+  res.status(err.code || 500);
+  res.json({ message: err.message || 'An unknown error occurred' });
 });
 
 (async () => {

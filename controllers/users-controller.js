@@ -40,18 +40,20 @@ const signUpUser = async (req, res, next) => {
     return next(error);
   }
 
+  let newUser;
   try {
-    const newUser = new User({
+    newUser = new User({
       name,
       email,
       password,
-      image: `https://i.pravatar.cc/300?v=${id}`,
+      image: `https://i.pravatar.cc/300?v=${email}`,
       places: [],
     });
 
     await newUser.save();
   } catch (err) {
     const error = new HttpError('Signing up failed. Please try again.', 500);
+    console.log(err.message);
     return next(error);
   }
 

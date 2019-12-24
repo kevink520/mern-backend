@@ -43,7 +43,7 @@ const getPlacesByUserId = async (req, res, next) => {
 
 const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!error.isEmpty()) {
+  if (!errors.isEmpty()) {
     return next(new HttpError('Validation failed.', 422));
   }
 
@@ -55,6 +55,8 @@ const createPlace = async (req, res, next) => {
     return next(error);
   }
 
+  return res.json({coordinates});
+
   const createdPlace = new Place({
     title,
     description,
@@ -64,11 +66,13 @@ const createPlace = async (req, res, next) => {
     creator,
   });
 
+  //return res.json({createdPlace})
   let user;
   try {
     user = await User.findById(creator);
   } catch (err) {
     const error = new HttpError('Creating place failed. Please try again', 500);
+    console.log('err', err)
     return next(error);
   }
 
@@ -86,10 +90,11 @@ const createPlace = async (req, res, next) => {
     await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError('Creating place failed. Please try again.', 500);
+    console.log('err', err)
     return next(error);
   }
 
-  res.status(201).json({ place, createdPlace });
+  res.status(201).json({ place: createdPlace });
 };
 
 const updatePlace = async (req, res, next) => {
