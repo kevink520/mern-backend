@@ -40,15 +40,15 @@ const signUpUser = async (req, res, next) => {
     return next(error);
   }
 
-  const newUser = new User({
-    name,
-    email,
-    password,
-    image: `https://i.pravatar.cc/300?v=${id}`,
-    places: [],
-  });
-
   try {
+    const newUser = new User({
+      name,
+      email,
+      password,
+      image: `https://i.pravatar.cc/300?v=${id}`,
+      places: [],
+    });
+
     await newUser.save();
   } catch (err) {
     const error = new HttpError('Signing up failed. Please try again.', 500);
@@ -78,7 +78,10 @@ const loginUser = async (req, res, next) => {
     return next(error);
   }
 
-  return res.status(200).json({ message: 'Logged In' });
+  return res.status(200).json({
+    message: 'Logged In',
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 exports.getAllUsers = getAllUsers;
