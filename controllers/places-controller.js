@@ -55,8 +55,6 @@ const createPlace = async (req, res, next) => {
     return next(error);
   }
 
-  return res.json({coordinates});
-
   const createdPlace = new Place({
     title,
     description,
@@ -66,7 +64,6 @@ const createPlace = async (req, res, next) => {
     creator,
   });
 
-  //return res.json({createdPlace})
   let user;
   try {
     user = await User.findById(creator);
@@ -99,7 +96,7 @@ const createPlace = async (req, res, next) => {
 
 const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!error.isEmpty()) {
+  if (!errors.isEmpty()) {
     return next(new HttpError('Validation failed', 422));
   }
 
