@@ -46,7 +46,7 @@ const signUpUser = async (req, res, next) => {
       name,
       email,
       password,
-      image: `https://i.pravatar.cc/300?v=${email}`,
+      image: req.file.path,
       places: [],
     });
 

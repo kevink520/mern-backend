@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { startSession } = require('mongoose');
 const getCoordsFromAddress = require('../util/location');
 const Place = require('../models/place');
@@ -60,7 +61,7 @@ const createPlace = async (req, res, next) => {
     description,
     location: coordinates,
     address,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Empire_State_Building_%28aerial_view%29.jpg',
+    image: req.file.path,
     creator,
   });
 
@@ -149,6 +150,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
+  fs.unlink(place.image, err => console.log(err));
   res.status(200).json({ message: 'Deleted place' });
 };
 
