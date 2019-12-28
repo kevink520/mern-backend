@@ -3,6 +3,7 @@ const { startSession } = require('mongoose');
 const getCoordsFromAddress = require('../util/location');
 const Place = require('../models/place');
 const User = require('../models/user');
+const { placePhotoDelete } = require('../middleware/file-upload');
 const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 
@@ -61,7 +62,7 @@ const createPlace = async (req, res, next) => {
     description,
     location: coordinates,
     address,
-    image: req.file.path,
+    image: req.file.location,
     creator: req.userData.userId,
   });
 
@@ -160,7 +161,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  fs.unlink(place.image, err => console.log(err));
+  placePhotoDelete(place.image);
   res.status(200).json({ message: 'Deleted place' });
 };
 

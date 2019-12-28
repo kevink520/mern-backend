@@ -11,7 +11,6 @@ const usersRoutes = require('./routes/users-routes');
 const app = express();
 
 app.use(bodyParser.json());
-app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 app.use((req, res, next) => {
   res.set({
     'Access-Control-Allow-Origin': '*',
@@ -29,11 +28,11 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  if (req.file) {
+  /*if (req.file) {
     fs.unlink(req.file.path, err => {
       console.log(err);
     });
-  }
+  }*/
 
   if (res.headerSent) {
     return next(err);
