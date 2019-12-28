@@ -73,7 +73,7 @@ const signUpUser = async (req, res, next) => {
         userId: newUser.id,
         email: newUser.email
       },
-      'supersecret_dont_share',
+      process.env.JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {
@@ -129,7 +129,7 @@ const loginUser = async (req, res, next) => {
         userId: existingUser.id,
         email: existingUser.email,
       },
-      'supersecret_dont_share',
+      process.env.JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {
