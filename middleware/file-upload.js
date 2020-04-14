@@ -17,6 +17,8 @@ const MIME_TYPE_MAP = {
 const s3UsersOptions = {
   s3,
   bucket: process.env.AWS_USERS_BUCKET_NAME,
+  acl: 'public-read',
+  contentType: multerS3.AUTO_CONTENT_TYPE,
   key: (req, file, cb) => {
     const ext = MIME_TYPE_MAP[file.mimetype];
     cb(null, `${uuid()}.${ext}`);
