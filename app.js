@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+require('dotenv').config();
+//const fs = require('fs');
+//const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -45,7 +46,7 @@ app.use((err, req, res, next) => {
 (async () => {
   try {
     await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${encodeURIComponent(process.env.DB_PASSWORD.replace('@', '\@'))}@cluster0-mf8wc.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
-    app.listen(process.env.PORT || 5000);
+    app.listen(process.env.PORT || 5050);
   } catch(error) {
     console.log(error);
   }
